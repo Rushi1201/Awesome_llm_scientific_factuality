@@ -1,4 +1,4 @@
-# AITR_Lab02 — MC vs. Open-Ended LLM Factuality on PubMedQA
+# Evaluating Factual Accuracy in Biomedical LLMs: A Comparative Study of Multiple-Choice and Open-Ended Questions
 
 **Student:** Rushikesh Shirsath | M.Tech (IT) Robotics & AI | IIIT Allahabad  
 **Course:** AI Tools for Research (Post Mid-Sem Assignment — MRA_02)  
