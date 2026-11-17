@@ -1,0 +1,77 @@
+# Frozen Experimental Settings
+# AITR_Lab02_RushikeshShirsath_LLMFactuality
+# FROZEN BEFORE VIEWING ANY RESULTS — do not modify after first run
+
+experiment:
+  name: "MC_vs_OpenEnded_LLM_Factuality_PubMedQA"
+  student: "Rushikesh Shirsath"
+  date_frozen: "2026-11-17"
+  seed: 42
+
+dataset:
+  name: "PubMedQA"
+  hf_path: "qiaojin/PubMedQA"
+  config: "pqa_labeled"
+  split: "train"
+  test_partition: "last_500"   # items[-500:] — fixed before any results viewed
+  train_partition: "first_500" # items[:-500] — used for BM25 corpus only
+
+models:
+  - name: "llama"
+    hf_id: "meta-llama/Llama-3.1-8B-Instruct"
+    quantization: "8bit"
+    requires_token: true
+    fallback: "BioMistral/BioMistral-7B"
+
+  - name: "mistral"
+    hf_id: "mistralai/Mistral-7B-Instruct-v0.3"
+    quantization: "8bit"
+    requires_token: false
+
+conditions:
+  - {model: "llama",   rag: false}
+  - {model: "llama",   rag: true}
+  - {model: "mistral", rag: false}
+  - {model: "mistral", rag: true}
+
+rag:
+  method: "bm25"
+  library: "rank_bm25"
+  retriever: "BM25Okapi"
+  top_k: 1
+  corpus: "pubmedqa_train_abstracts"  # never test items
+
+inference:
+  max_new_tokens_mc: 5
+  max_new_tokens_openended: 100
+  do_sample: false       # greedy decoding
+  temperature: 0
+  pad_token: "eos"
+
+prompts:
+  mc_template: "prompt_templates.MC_TEMPLATE"
+  openended_template: "prompt_templates.OPENENDED_TEMPLATE"
+  context_max_words: 400
+
+evaluation:
+  mc_metrics: ["accuracy_3class", "macro_f1"]
+  openended_metrics: ["token_f1_squad_style"]
+  primary_metric: "token_f1"           # open-ended token F1
+  mc_labels: ["yes", "no", "maybe"]
+  majority_class_baseline: 0.55        # from Jin et al. (2019)
+
+checkpointing:
+  every_n_items: 50
+  output_dir: "results/"
+
+deeper_analysis:
+  per_class_confusion_matrix: true
+  failure_case_n: 20                   # 20 lowest token-F1 items analyzed qualitatively
+  failure_categories: ["hallucination", "incomplete", "off_topic", "near_miss"]
+
+pre_experiment_checklist:
+  primary_metric_defined: true
+  test_split_frozen: true
+  protocol_defined_before_results: true
+  no_test_tuning: true
+  bm25_corpus_excludes_test: true

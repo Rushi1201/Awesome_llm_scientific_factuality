@@ -1,0 +1,69 @@
+# .gitignore — AITR_Lab02_RushikeshShirsath_LLMFactuality
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Results (committed after runs complete)
+results/checkpoint_*.json
+results/ckpt_*.json
+
+# Secrets — NEVER commit these
+*.env
+.env
+HF_TOKEN
+huggingface_token.txt
+*_token.txt
+*secret*
+*.key
+
+# Model weights — do NOT commit (too large)
+*.bin
+*.safetensors
+*.pt
+*.pth
+model_cache/
+hf_cache/
+
+# Data — do NOT commit raw data
+data/raw/
+data/*.json
+data/*.csv
+data/*.tsv
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.bbl
+paper/*.blg
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+paper/_minted-*/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
